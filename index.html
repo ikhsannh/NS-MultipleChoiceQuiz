@@ -9,25 +9,43 @@
 </head>
 
 <body>
-    <h1 id="question"></h1>
+    <h1 id="quiz">Playing with Quiz!</h1>
+    <h2 id="question"></h2>
     <input type="radio" name="choices" data-id="0" id="choice0">
     <label for="choice0" id="choiceText0"></label>
 
     <input type="radio" name="choices" data-id="1" id="choice1">
-    <label for="choice1" id="choiceText0"></label>
+    <label for="choice1" id="choiceText1"></label>
 
     <input type="radio" name="choices" data-id="2" id="choice2">
-    <label for="choice2" id="choiceText0"></label>
+    <label for="choice2" id="choiceText2"></label>
 
     <input type="radio" name="choices" data-id="3" id="choice3">
-    <label for="choice3" id="choiceText0"></label>
+    <label for="choice3" id="choiceText3"></label>
+    <br />
+    <br />
 
-    <button>Next</button>
+    <button onclick="nextQuestion()">Next</button>
 
     <script>
+        //==Data structure==
         const DB_QUIZ = [
-            {}
+            {
+                question: "What is NS?",
+                answers: ['NARUTO SIPPUDEN', 'NASHKI SPACE', 'NASI SAYUR', 'NAON SIAH']
+            },
+            {
+                question: "SOP reverse?",
+                answers: ['POS', 'OPS', 'SPO', 'SPILL']
+            },
+            {
+                question: "Programmer is...?",
+                answers: ['STRONG', 'WEAK', 'NOT HUMAN', 'WHAT?']
+            },
         ]
+
+        const CORRECT_ANSWER = [1, 3, 0]
+
     </script>
 </body>
 
