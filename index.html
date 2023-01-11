@@ -6,29 +6,50 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Playing with Quiz!</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
-    <h1 id="quiz">Playing with Quiz!</h1>
-    <h2 id="question"></h2>
-    <input type="radio" name="choices" data-id="0" id="choice0">
-    <label for="choice0" id="choiceText0"></label>
+    <div id="opening_window">
+        <h1>Welcome to Playground!</h1>
+        <button onclick="startQuiz()">Let's play</button>
+    </div>
+    
+    <div id="quiz_window" class="hidden">
 
-    <input type="radio" name="choices" data-id="1" id="choice1">
-    <label for="choice1" id="choiceText1"></label>
 
-    <input type="radio" name="choices" data-id="2" id="choice2">
-    <label for="choice2" id="choiceText2"></label>
+        <h1 id="question"></h1>
+        <input type="radio" name="choices" data-id="0" id="choice0">
+        <label for="choice0" id="choiceText0"></label>
 
-    <input type="radio" name="choices" data-id="3" id="choice3">
-    <label for="choice3" id="choiceText3"></label>
-    <br />
-    <br />
+        <input type="radio" name="choices" data-id="1" id="choice1">
+        <label for="choice1" id="choiceText1"></label>
 
-    <button onclick="nextQuestion()">Next</button>
+        <input type="radio" name="choices" data-id="2" id="choice2">
+        <label for="choice2" id="choiceText2"></label>
+
+        <input type="radio" name="choices" data-id="3" id="choice3">
+        <label for="choice3" id="choiceText3"></label>
+        <br />
+        <br />
+
+        <button onclick="nextQuestion()">Next</button>
+    </div>
+
+    <div id="closing_window" class="hidden">
+        <h1>Quiz done!</h1>
+        <h2 id="scoreText"> </h2>
+    </div>
 
     <script>
-        //==Data structure==
+        //===========================
+        //=======Data Structure======
+        //===========================        
+
         const DB_QUIZ = [
             {
                 question: "What is NS?",
@@ -36,15 +57,87 @@
             },
             {
                 question: "SOP reverse?",
-                answers: ['POS', 'OPS', 'SPO', 'SPILL']
+                answers: ['POS', 'OPS', 'SPO', 'TUMPAH!']
             },
             {
                 question: "Programmer is...?",
                 answers: ['STRONG', 'WEAK', 'NOT HUMAN', 'WHAT?']
             },
-        ]
+        ];
 
         const CORRECT_ANSWER = [1, 3, 0]
+
+        //===========================
+        //==Dynamic Question System==
+        //===========================        
+
+        function startQuiz() {
+            document.getElementById('opening_window').style.display = "none"
+            document.getElementById('quiz_window').style.display = "block"
+        }
+
+        //make dynamic variable for question
+        let current_q   = 0
+        let total_score = 0
+        //save answer in array
+        let saved_answer = []
+        //when DOM content first time reload
+        document.addEventListener("DOMContentLoaded", function (event) {
+            //then setup question = take the first question
+            setupQuestion()
+        });
+
+        function setupQuestion() {
+            document.getElementById('question').innerText = DB_QUIZ[current_q]['question']
+            document.getElementById('choiceText0').innerText = DB_QUIZ[current_q]['answers'][0]
+            document.getElementById('choiceText1').innerText = DB_QUIZ[current_q]['answers'][1]
+            document.getElementById('choiceText2').innerText = DB_QUIZ[current_q]['answers'][2]
+            document.getElementById('choiceText3').innerText = DB_QUIZ[current_q]['answers'][3]
+        }
+
+        function nextQuestion() {
+            current_q++
+            //treshold question / batas
+            saveAnswer()
+            if (current_q > DB_QUIZ.length - 1)
+                stopQuiz()
+
+            resetState()
+            setupQuestion()
+        }
+
+        //when next question, clear checkbox history
+        function resetState() {
+            document.querySelector('input[name="choices"]:checked').checked = false
+        }
+
+        //sign when button "next" max
+        function stopQuiz() {
+            checkScore()
+            document.getElementById('quiz_window').style.display = "none"
+            document.getElementById('closing_window').style.display = "block"
+
+            document.getElementById('scoreText').innerHTML = "Your Score " + total_score
+            return
+        }
+
+        function saveAnswer() {
+            const answer = document.querySelector('input[name="choices"]:checked');
+            if (answer != null) {
+                saved_answer.push(parseInt(answer.getAttribute('data-id')))
+                console.log(saved_answer)
+            } else {
+                saved_answer.push(0)
+            }
+        }
+
+        function checkScore() {
+            for (i = 0; i < saved_answer.length; i++) {
+                if (saved_answer[i] == CORRECT_ANSWER[i])
+                    //scoring from 100 each question
+                    total_score += 100
+            }
+        }
 
     </script>
 </body>
